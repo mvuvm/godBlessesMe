@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>당첨기원</title>
+
+    <style>
+        @font-face {
+            font-family: 'SF_HambakSnow';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2106@1.1/SF_HambakSnow.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        html,body{margin: 0; padding:0; background: hsla(0,0%,5%,1);}
+        body{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        .wrapper{
+            position: relative;
+            width: 100%;
+            z-index: 99;
+            color: #eee;
+            padding: 0 2em;
+        }
+        .wrapper,h1,p{text-align: center; font-family: 'SF_HambakSnow'; text-shadow: 0 0 10px #aaa; transition: all ease 0.5s;}
+        h1{font-size: 3em; word-break: keep-all;}
+        p{font-size: 1.2em;}
+        .number_box{
+            display: flex;
+            justify-content: space-between;
+            max-width: 700px;
+            gap: 10px;
+            margin: 0 auto;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 5rem 0 4.5rem;
+            transition: all ease 0.5s;
+        }
+        .number{
+            position: relative;
+            font-size: 2em;
+            font-weight: normal;
+            transition: all ease 0.5s;
+        }
+
+        .DearGod{
+            position: relative;
+            background:transparent;
+            box-shadow: none;
+            border:none;
+            padding: 10px 20px;
+            font-family: 'SF_HambakSnow';
+            font-size: 1.5em;
+            cursor: pointer;
+            text-shadow: 0 0 10px #aaa;
+            transition: all ease 0.5s;
+            color: #999;
+        }
+        .DearGod:hover{
+            color: #eee !important;
+        }
+        .number::before,
+        .DearGod::before{
+            content: "✶";
+            display: block;
+            position: absolute;
+            top:-30%; left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            animation: upDown 2s infinite;
+        }
+        .number::before{
+            top:-100%;
+            font-size: 0.7em;
+            animation: rotate 10s infinite;
+        }
+        @keyframes upDown{
+            0%,100%  {transform: translate(-50%,-30%);}
+            50% {transform: translate(-50%,-70%);}
+        }
+        @keyframes rotate{
+            0%,100%  {transform: translateX(-50%) rotate(0deg);}
+            50% {transform: translateX(-50%) rotate(360deg);}
+        }
+    </style>
+</head>
+<body class="content content--canvas">
+    <div class="wrapper">
+        <h1>숭구리당당 숭당당</h1>
+        <p>당신은 절대로 된다.</p>
+        <div class="number_box"></div>
+        <button class="DearGod">우주의 기운 받기</button>
+    </div>
+
+    <script src="js/noise.min.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/swirl.js"></script>
+    <script>
+    let lotto = ['?','?','?','?','?','?'];
+    function lottoPick(min, max) {
+//                       _oo0oo_
+//                      o8888888o
+//                      88" . "88
+//                      (| -_- |)
+//                      0\  =  /0
+//                    ___/`---'\___
+//                  .' \\|     |// '.
+//                 / \\|||  :  |||// \
+//                / _||||| -:- |||||- \
+//               |   | \\\  -  /// |   |
+//               | \_|  ''\---/''  |_/ |
+//               \  .-\__  '-'  ___/-. /
+//             ___'. .'  /--.--\  `. .'___
+//          ."" '<  `.___\_<|>_/___.' >' "".
+//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+//         \  \ `_.   \_ __\ /__ _/   .-` /  /
+//     =====`-.____`.___ \_____/___.-`___.-'=====
+//                       `=---='
+//
+//
+//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        for(i=0; i<6; i++){
+            let n = Math.floor(Math.random() * (max - min + 1)) + min;
+            if (! sameNum(n)) {
+            lotto.push(n);
+            } else {
+            i--;
+            }
+        }
+        function sameNum (n) {
+            return lotto.find((e) => (e === n));
+        }
+        return lotto.sort(function(a, b){ return a - b; });
+
+    }
+
+    let lottoList = [];
+    for(i = 0; i<6; i++){
+            lottoList.push(`
+            <div class="number">
+                <span>${lotto[i]}</span>
+            </div>
+            `)
+            document.querySelector('.number_box').innerHTML = lottoList.join('');
+    }
+
+    document.querySelector('.DearGod').addEventListener('click', function(){
+        document.querySelector('.number_box').style.opacity = '0';
+        lotto.length = 0;
+        lottoList.length = 0;
+        lottoPick(1, 45);
+        setTimeout(function(){
+            for(i = 0; i<6; i++){
+            lottoList.push(`
+            <div class="number">
+                <span>${lotto[i]}</span>
+            </div>
+            `)
+            document.querySelector('.number_box').innerHTML = lottoList.join('');
+        }
+        }, 500);
+        console.log(lotto);
+        setTimeout(function(){
+            document.querySelector('.number_box').style.opacity = '1';
+        }, 800);
+    });
+
+    //색상 바뀌게 하기
+    function changeColor() {
+        if (baseHue<361) {
+                baseHue =  baseHue + 30;
+                document.querySelector('h1').style.textShadow = `0 0 10px hsl(${baseHue},100%,60%)`;
+                document.querySelector('.number_box').style.textShadow = `0 0 10px hsl(${baseHue},100%,60%)`;
+                document.querySelector('.DearGod').style.color = `hsl(${baseHue},40%,60%)`;
+                document.querySelector('.DearGod').style.textShadow = `0 0 10px hsl(${baseHue},100%,60%)`;
+        }else{
+            baseHue = 0;
+        }
+    }
+
+    setInterval(changeColor, 800);
+
+
+    </script>
+</body>
+</html>
