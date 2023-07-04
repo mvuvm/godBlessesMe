@@ -88,6 +88,19 @@
             0%,100%  {transform: translateX(-50%) rotate(0deg);}
             50% {transform: translateX(-50%) rotate(360deg);}
         }
+        canvas{
+            width: 75% !important;
+            height: auto !important;
+            top: 50% !important; left: 50% !important;
+            transform: translate(-50%,-50%) !important;
+        }
+
+        @media all and (max-width: 780px){
+            canvas{
+                width: 90% !important;
+            }
+        }
+
     </style>
 </head>
 <body class="content content--canvas">
